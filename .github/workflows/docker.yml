@@ -56,55 +56,6 @@ jobs:
             ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.run_number }}
             ghcr.io/${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }}
             ghcr.io/${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.run_number }}
-          build-args: |
-            "BUILD=${{ github.event.repository.name }}"
-      - name: show version
-        if: ${{ github.event_name != 'pull_request' }}
-        run: |
-          docker run --rm ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }} -V
-          docker run --rm ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.run_number }} -V
-          docker run --rm ghcr.io/${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }} -V
-          docker run --rm ghcr.io/${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.run_number }} -V
-      - name: copy nginx
-        if: ${{ github.event_name != 'pull_request' }}
-        run: |
-          docker run -d --pull always --platform amd64 --name nginx-x86_64 ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }}
-          docker cp nginx-x86_64:/usr/local/nginx nginx
-          docker cp nginx-x86_64:/usr/local/lib/perl5 nginx/perl5
-          docker cp nginx-x86_64:/usr/local/nginx/sbin/nginx nginx-x86_64
-          docker cp nginx-x86_64:/usr/lib/perl5/core_perl/perllocal.pod nginx/perllocal.pod
-          docker cp nginx-x86_64:/usr/local/modsecurity/lib/libmodsecurity.so.3 nginx/libmodsecurity.so.3
-          tar -cJf nginx-x86_64.tar.xz nginx
-          rm -r nginx
-          docker run -d --pull always --platform arm64 --name nginx-aarch64 ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }}
-          docker cp nginx-aarch64:/usr/local/nginx nginx
-          docker cp nginx-aarch64:/usr/local/lib/perl5 nginx/perl5
-          docker cp nginx-aarch64:/usr/local/nginx/sbin/nginx nginx-aarch64
-          docker cp nginx-aarch64:/usr/lib/perl5/core_perl/perllocal.pod nginx/perllocal.pod
-          docker cp nginx-aarch64:/usr/local/modsecurity/lib/libmodsecurity.so.3 nginx/libmodsecurity.so.3
-          tar -cJf nginx-aarch64.tar.xz nginx
-          rm -r nginx
-      - uses: actions/upload-artifact@v3
-        if: ${{ github.event_name != 'pull_request' }}
-        with:
-          name: artifacts
-          path: |
-            nginx-x86_64
-            nginx-x86_64.tar.xz
-            nginx-aarch64
-            nginx-aarch64.tar.xz
-      - uses: "marvinpinto/action-automatic-releases@latest"
-        if: ${{ github.event_name != 'pull_request' }}
-        with:
-          prerelease: false
-          repo_token: ${{ github.token }}
-          title: ${{ github.run_number }}
-          automatic_release_tag: ${{ github.run_number }}
-          files: |
-            nginx-x86_64
-            nginx-x86_64.tar.xz
-            nginx-aarch64
-            nginx-aarch64.tar.xz
       - name: Set PR-Number (PR)
         if: ${{ github.event_name == 'pull_request' }}
         id: pr
@@ -118,39 +69,6 @@ jobs:
           platforms: linux/amd64,linux/arm64 #,linux/amd64/v2,linux/amd64/v3,linux/amd64/v4 #,linux/ppc64le,linux/s390x,linux/386,linux/arm/v7,linux/arm/v6
           push: ${{ github.event_name == 'pull_request' }}
           tags: ghcr.io/${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ steps.pr.outputs.pr }}
-          build-args: |
-            "BUILD=${{ github.event.repository.name }}"
-      - name: show version (PR)
-        if: ${{ github.event_name == 'pull_request' }}
-        run: docker run --rm ghcr.io/${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ steps.pr.outputs.pr }} -V
-      - name: copy nginx (PR)
-        if: ${{ github.event_name == 'pull_request' }}
-        run: |
-          docker run -d --pull always --platform amd64 --name nginx-x86_64 ghcr.io/${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ steps.pr.outputs.pr }}
-          docker cp nginx-x86_64:/usr/local/nginx nginx
-          docker cp nginx-x86_64:/usr/local/lib/perl5 nginx/perl5
-          docker cp nginx-x86_64:/usr/local/nginx/sbin/nginx nginx-x86_64
-          docker cp nginx-x86_64:/usr/lib/perl5/core_perl/perllocal.pod nginx/perllocal.pod
-          docker cp nginx-x86_64:/usr/local/modsecurity/lib/libmodsecurity.so.3 nginx/libmodsecurity.so.3
-          tar -cJf nginx-x86_64.tar.xz nginx
-          rm -r nginx
-          docker run -d --pull always --platform arm64 --name nginx-aarch64 ghcr.io/${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ steps.pr.outputs.pr }}
-          docker cp nginx-aarch64:/usr/local/nginx nginx
-          docker cp nginx-aarch64:/usr/local/lib/perl5 nginx/perl5
-          docker cp nginx-aarch64:/usr/local/nginx/sbin/nginx nginx-aarch64
-          docker cp nginx-aarch64:/usr/lib/perl5/core_perl/perllocal.pod nginx/perllocal.pod
-          docker cp nginx-aarch64:/usr/local/modsecurity/lib/libmodsecurity.so.3 nginx/libmodsecurity.so.3
-          tar -cJf nginx-aarch64.tar.xz nginx
-          rm -r nginx
-      - uses: actions/upload-artifact@v3
-        if: ${{ github.event_name == 'pull_request' }}
-        with:
-          name: artifacts
-          path: |
-            nginx-x86_64
-            nginx-x86_64.tar.xz
-            nginx-aarch64
-            nginx-aarch64.tar.xz
       - name: add comment (PR)
         uses: mshick/add-pr-comment@v2
         if: ${{ github.event_name == 'pull_request' }}
