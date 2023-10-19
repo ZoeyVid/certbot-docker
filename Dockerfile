@@ -9,12 +9,12 @@ RUN apk add --no-cache ca-certificates build-base libffi-dev go && \
 #                               certbot-dns-dnsimple \
 #                               certbot-dns-dnsmadeeasy \
 #                               certbot-dns-gehirn \
-                               certbot-dns-google \
+#                               certbot-dns-google \
 #                               certbot-dns-linode \
 #                               certbot-dns-luadns \
 #                               certbot-dns-nsone \
 #                               certbot-dns-ovh \
-                               certbot-dns-rfc2136 \
+#                               certbot-dns-rfc2136 \
 #                               certbot-dns-route53 \
 #                               certbot-dns-sakuracloud \
                                \
