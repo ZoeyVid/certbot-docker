@@ -29,7 +29,7 @@ jobs:
               | sed -E "s/\^\{\}//"
           )"
           sed -i "s|certbot==.*|certbot==$CB_VERSION \\\|" Dockerfile
-          sed -i "s|certbot-dns-cloudflare==.*|certbot-dns-cloudflare==$CB_VERSION \\\|" Dockerfile
+          sed -i "s|certbot-dns-cloudflare==.*|certbot-dns-cloudflare==$CB_VERSION|" Dockerfile
           sed -i "s|certbot-dns-multi==.*|certbot-dns-multi==$CBDM_VERSION|" Dockerfile
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
