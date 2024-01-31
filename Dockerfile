@@ -4,7 +4,7 @@ RUN apk add --no-cache ca-certificates build-base libffi-dev && \
     pip install --no-cache-dir \
                                certbot==2.8.0 \
                                certbot-dns-cloudflare==2.8.0
-# needs go                     certbot-dns-multi==4.14.2
+# needs go                     certbot-dns-multi==4.15.0
 
 FROM scratch
 COPY --from=certbot /usr/local /usr/local
