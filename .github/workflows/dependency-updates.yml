@@ -32,7 +32,7 @@ jobs:
           sed -i "s|certbot-dns-cloudflare==.*|certbot-dns-cloudflare==$CB_VERSION|" Dockerfile
           sed -i "s|certbot-dns-multi==.*|certbot-dns-multi==$CBDM_VERSION|" Dockerfile
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           signoff: true
           delete-branch: true
