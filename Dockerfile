@@ -1,4 +1,4 @@
-FROM python:3.12.2-alpine3.19 as certbot
+FROM python:3.12.3-alpine3.19 as certbot
 RUN apk upgrade --no-cache -a && \
     apk add --no-cache ca-certificates build-base libffi-dev && \
     python3 -m venv /usr/local && \
