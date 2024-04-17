@@ -1,2 +1,2 @@
 # certbot-docker
-Certbot with dns-multi and first party dns plugins
+Certbot and a few first party dns plugins
