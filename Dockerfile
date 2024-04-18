@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:labs
 FROM python:3.12.3-alpine3.19 as certbot
 RUN apk upgrade --no-cache -a && \
     apk add --no-cache ca-certificates build-base libffi-dev && \
