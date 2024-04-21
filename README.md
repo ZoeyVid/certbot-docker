@@ -1,2 +1,3 @@
 # certbot-docker
-Certbot and a few first party dns plugins
+
+This docker image contains certbot as venv in /usr/local (and no python to run it)
