@@ -1,2 +1,1 @@
 certbot==2.11.0
-certbot-nginx==2.11.0
